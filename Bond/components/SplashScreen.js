@@ -12,7 +12,7 @@ function SplashScreen({ navigation }) {
     <View style={styles.container}>
       <Image
         source={require("../Bond pics/BondLogo.jpg")}
-        style={styles.logo} // Apply the style to adjust the size
+        style={styles.logo} 
       />
     </View>
   );
@@ -23,12 +23,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff', // Optional: change the background color
+    backgroundColor: '#fff',
   },
   logo: {
-    width: 700, // Adjust the width as needed
-    height: 700, // Adjust the height as needed
-    resizeMode: 'contain' // This ensures the aspect ratio is preserved
+    width: 700, 
+    height: 700,
+    resizeMode: 'contain'
   },
 });
 
