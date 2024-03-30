@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 15,
   },
   dividerLine: {
     flex: 1,
@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
   forgotPassword: {
     color: '#0FC1DF',
     marginTop: 15,
+    marginBottom: 10,
   },
   newAccountButton: {
     backgroundColor: '#FF8F49', 

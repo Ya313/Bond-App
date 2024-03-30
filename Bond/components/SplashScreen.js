@@ -1,11 +1,29 @@
 import React, { useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
-
+import { Audio } from 'expo-av';
 function SplashScreen({ navigation }) {
   useEffect(() => {
-    setTimeout(() => {
-      navigation.replace('LoginPage');
-    }, 3000); // 3 seconds delay
+  
+    const playSound = async () => {
+    
+      const { sound } = await Audio.Sound.createAsync(
+        require('../BondSounds/BondSound.mp3')
+      );
+
+      await sound.playAsync();
+
+      setTimeout(() => {
+    
+        sound.unloadAsync();
+        navigation.replace('LoginPage');
+      }, 3000); 
+    };
+
+    playSound();
+
+    return () => {
+    
+    };
   }, [navigation]);
 
   return (
@@ -14,6 +32,7 @@ function SplashScreen({ navigation }) {
         source={require("../Bond pics/BondLogo.jpg")}
         style={styles.logo} 
       />
+      
     </View>
   );
 }
