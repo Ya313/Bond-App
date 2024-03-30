@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, Alert, Image } from 'react-native';
 
-const SignUpScreen = ({ navigation }) => {
+const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignUp = () => {
+  const handleLogin = () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please fill all fields');
       return;
@@ -38,8 +38,25 @@ const SignUpScreen = ({ navigation }) => {
         secureTextEntry
       />
       
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Log In</Text>
+      </TouchableOpacity>
+
+       {/* Forgot Password Link */}
+       <Text style={styles.forgotPassword} onPress={() => Alert.alert('Redirect', 'Forgot Password Clicked')}>
+        Forgot password?
+      </Text>
+
+       {/* Division with "OR" Text */}
+       <View style={styles.dividerContainer}>
+        <View style={styles.dividerLine} />
+        <Text style={styles.dividerText}>OR</Text>
+        <View style={styles.dividerLine} />
+      </View>
+
+      {/* Create New Account Button */}
+      <TouchableOpacity style={styles.newAccountButton} onPress={() => Alert.alert('Redirect', 'Create New Account Clicked')}>
+        <Text style={styles.newAccountButtonText}>Create new account</Text>
       </TouchableOpacity>
     </View>
   );
@@ -60,26 +77,50 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+    color: '#000000',
     marginBottom: 20,
     fontWeight: 'bold',
   },
   input: {
     width: '100%',
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#000000',
     padding: 10,
     marginBottom: 10,
   },
   button: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#0FC1DF',
     padding: 10,
     borderRadius: 5,
+    marginbottom: 10,
   },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
   },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#ccc',
+  },
+  forgotPassword: {
+    color: '#0FC1DF',
+    marginTop: 15,
+  },
+  newAccountButton: {
+    backgroundColor: '#FF8F49', 
+    padding: 10,
+    borderRadius: 5,
+  },
+  newAccountButtonText: {
+    color: '#fff',
+  },
 });
 
-export default SignUpScreen;
+export default LoginPage;
 

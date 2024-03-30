@@ -4,7 +4,7 @@ import { View, Image, StyleSheet } from 'react-native';
 function SplashScreen({ navigation }) {
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace('SignUp');
+      navigation.replace('LoginPage');
     }, 3000); // 3 seconds delay
   }, [navigation]);
 

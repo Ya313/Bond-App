@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SignUpScreen from './components/SignUpScreen.js';
+import LoginPage from './components/LoginPage.js';
 import SplashScreen from './components/SplashScreen.js';
 const Stack = createNativeStackNavigator();
 
@@ -10,7 +10,7 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Splash" component={SplashScreen} options={{headerShown: false}} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} options={{headerShown: false}} />
+        <Stack.Screen name="LoginPage" component={LoginPage} options={{headerShown: false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );
