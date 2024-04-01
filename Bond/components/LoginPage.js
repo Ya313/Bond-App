@@ -5,14 +5,13 @@ const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please fill all fields');
       return;
     }
     Alert.alert('Success', 'You have signed up successfully');
   };
-
   return (
     <View style={styles.container}>
       {/* Image */}
@@ -55,9 +54,10 @@ const LoginPage = ({ navigation }) => {
       </View>
 
       {/* Create New Account Button */}
-      <TouchableOpacity style={styles.newAccountButton} onPress={() => Alert.alert('Redirect', 'Create New Account Clicked')}>
+      <TouchableOpacity style={styles.newAccountButton} onPress={() => navigation.navigate('register')}>
         <Text style={styles.newAccountButtonText}>Create new account</Text>
       </TouchableOpacity>
+
     </View>
   );
 };
