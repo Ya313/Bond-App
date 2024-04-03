@@ -10,8 +10,7 @@ const LoginPage = ({ navigation }) => {
       Alert.alert('Error', 'Please fill all fields');
       return;
     }
-    Alert.alert('Success', 'You have signed up successfully');
-  };
+    navigation.navigate('MainInterface')}
   return (
     <View style={styles.container}>
       {/* Image */}

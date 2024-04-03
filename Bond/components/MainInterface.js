@@ -1,32 +1,163 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Button, TouchableOpacity, Modal } from 'react-native';
+import { Image } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 
-const MainInterface = () => {
-  const navigation = useNavigation();
+// Define your screen components
+function Messages() {
+  return (
+    <View style={styles.scene}><Text>First Page</Text></View>
+  );
+}
 
-  const handleLogout = () => {
-    // Navigate back to the Login Page
-    navigation.navigate('LoginPage');
-  };
+function Events() {
+  return (
+    <View style={styles.scene}><Text>Second Page</Text></View>
+  );
+}
+
+function Invitation() {
+  return (
+    <View style={styles.scene}><Text>Third Page</Text></View>
+  );
+}
+
+function Profile() {
+  return (
+    <View style={styles.scene}><Text>Fourth Page</Text></View>
+  );
+}
+
+const Tab = createBottomTabNavigator();
+function MainInterface() {
+  const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Welcome to the Main Interface!</Text>
-      <Button title="Log Out" onPress={handleLogout} />
-    </View>
+    <>
+      <View style={styles.headerRight}>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <Text style={styles.headerRightText}>Settings</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Button title="Log Out" onPress={() => {
+              setModalVisible(!modalVisible);
+              navigation.navigate('LoginPage');
+            }} />
+          </View>
+        </View>
+      </Modal>
+
+      <Tab.Navigator
+        screenOptions={{
+          headerLeft: () => (
+            <Image
+              source={require('../Bond pics/Bond.jpg')} 
+              style={{ width: 110, height: 50, marginLeft: 10 }} // Customize as needed
+            />
+          ),
+          headerTitle: '', // Hide the title
+        }}
+      >
+       <Tab.Screen
+        name="Messages"
+        component={Messages}
+        options={{
+          tabBarLabel: 'Messages',
+          tabBarIcon: ({ color, size }) => (
+        <MaterialCommunityIcons name="message-text-outline" color={color} size={size} />
+      ),
+    }}
+  />
+        <Tab.Screen
+          name="Events"
+          component={Events}
+          options={{
+            tabBarLabel: 'Events',
+            tabBarIcon: ({ color, size }) => (
+        <MaterialCommunityIcons name="calendar" color={color} size={size} />
+      ),
+    }}
+  />
+        <Tab.Screen
+          name="Invitation"
+          component={Invitation}
+          options={{
+          tabBarLabel: 'Invites',
+          tabBarIcon: ({ color, size }) => (
+        <MaterialCommunityIcons name="email-outline" color={color} size={size} />
+      ),
+    }}
+  />
+        <Tab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            tabBarLabel: 'Profile',
+            tabBarIcon: ({ color, size }) => (
+        <MaterialCommunityIcons name="account-circle-outline" color={color} size={size} />
+      ),
+    }}
+  />
+      </Tab.Navigator>
+    </>
   );
-};
+}
+
 
 const styles = StyleSheet.create({
-  container: {
+  scene: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
-    fontSize: 20,
-    marginBottom: 20,
+
+  headerRight: {
+    backgroundColor: '#FF8F49', 
+    padding: 5,
+    borderRadius: 5,
+    position: 'absolute',
+    right: 10,
+    top: 35,
+    zIndex: 1,
+  },
+  headerRightText: {
+    fontSize: 18,
+    color: 'white',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
 
