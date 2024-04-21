@@ -1,9 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, Modal } from 'react-native';
 import { Image } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
+import { Platform, Alert } from 'react-native';
+
+// Function to request location permission
+export async function getLocationPermissions() {
+  const granted = await request(
+    Platform.select({
+      android: PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
+      ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+    }),
+    {
+       title: 'Location Permission',
+       message: 'This app requires access to your location',
+       buttonPositive: 'OK',
+       buttonNegative: 'Cancel',
+    },
+  );
+  return granted === RESULTS.GRANTED;
+}
 
 // Define your screen components
 function Messages() {
@@ -35,6 +53,26 @@ function MainInterface() {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
 
+   useEffect(() => {
+      const requestLocationPermission = async () => {
+        try {
+          const permissionGranted = await getLocationPermissions();
+          if (permissionGranted) {
+            console.log('Location permission granted');
+            // fetch local events
+          } else {
+            console.log('Location permission denied');
+            Alert.alert('Permission Denied', 'Bond needs to access your location to find local events!');
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      };
+
+      requestLocationPermission();
+    }, []);
+
+
   return (
     <>
       <View style={styles.headerRight}>
@@ -65,7 +103,7 @@ function MainInterface() {
         screenOptions={{
           headerLeft: () => (
             <Image
-              source={require('../Bond pics/Bond.jpg')} 
+              source={require('../Bond pics/Bond.jpg')}
               style={{ width: 110, height: 50, marginLeft: 10 }} // Customize as needed
             />
           ),
@@ -126,7 +164,7 @@ const styles = StyleSheet.create({
   },
 
   headerRight: {
-    backgroundColor: '#FF8F49', 
+    backgroundColor: '#FF8F49',
     padding: 5,
     borderRadius: 5,
     position: 'absolute',
