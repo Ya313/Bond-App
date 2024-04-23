@@ -1,38 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, Modal } from 'react-native';
-import { Image } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableOpacity, Modal, Image } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
-import { Platform, Alert } from 'react-native';
-
-// Function to request location permission
-export async function getLocationPermissions() {
-  const granted = await request(
-    Platform.select({
-      android: PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
-      ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-    }),
-    {
-       title: 'Location Permission',
-       message: 'This app requires access to your location',
-       buttonPositive: 'OK',
-       buttonNegative: 'Cancel',
-    },
-  );
-  return granted === RESULTS.GRANTED;
-}
+import { Platform, Alert, PermissionsAndroid } from 'react-native';
+import * as Location from 'expo-location';
+import Events from './Events';
 
 // Define your screen components
 function Messages() {
   return (
-    <View style={styles.scene}><Text>First Page</Text></View>
-  );
-}
-
-function Events() {
-  return (
-    <View style={styles.scene}><Text>Second Page</Text></View>
+    <View style={styles.scene}><Text>No Messages Yet</Text></View>
   );
 }
 
@@ -49,28 +27,37 @@ function Profile() {
 }
 
 const Tab = createBottomTabNavigator();
+// When the main interface is loaded, get location permission
 function MainInterface() {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
+  // State to hold location
+  const [location, setLocation] = useState(false);
 
-   useEffect(() => {
-      const requestLocationPermission = async () => {
-        try {
-          const permissionGranted = await getLocationPermissions();
-          if (permissionGranted) {
-            console.log('Location permission granted');
-            // fetch local events
-          } else {
-            console.log('Location permission denied');
-            Alert.alert('Permission Denied', 'Bond needs to access your location to find local events!');
-          }
-        } catch (err) {
-          console.warn(err);
-        }
-      };
+useEffect(() => {
+  getLocation();
+}, []);
 
-      requestLocationPermission();
-    }, []);
+ // Function to get user's location
+ const getLocation = async () => {
+   try {
+     const { status } = await Location.requestForegroundPermissionsAsync();
+     if (status !== 'granted') {
+       Alert.alert(
+         'Permission Denied',
+         'Bond needs to access your location to find local events!'
+       );
+       return;
+     }
+
+     const location = await Location.getCurrentPositionAsync({});
+     console.log(location);
+     setLocation(location.coords);
+   } catch (error) {
+     console.error(error);
+     setLocation(null);
+   }
+ };
 
 
   return (
@@ -122,14 +109,16 @@ function MainInterface() {
   />
         <Tab.Screen
           name="Events"
-          component={Events}
           options={{
             tabBarLabel: 'Events',
             tabBarIcon: ({ color, size }) => (
-        <MaterialCommunityIcons name="calendar" color={color} size={size} />
-      ),
-    }}
-  />
+              <MaterialCommunityIcons name="calendar" color={color} size={size} />
+            ),
+          }}
+        >
+          {/* Define a component to be rendered inside Tab.Screen */}
+          {() => <Events location={location} />}
+        </Tab.Screen>
         <Tab.Screen
           name="Invitation"
           component={Invitation}
